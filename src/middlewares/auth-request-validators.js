@@ -12,4 +12,4 @@ const validateUserAuth = (req, res, next) => {
 
 module.exports = {
     validateUserAuth    
-}
+} 
