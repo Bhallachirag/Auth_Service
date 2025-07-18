@@ -1,3 +1,4 @@
+const { StatusCodes } = require('http-status-codes');
 const UserService = require('../services/user-service');
 
 const userService = new UserService();
@@ -6,7 +7,8 @@ const create = async (req, res) => {
     try {
         const response = await userService.create({
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            mobileNumber: req.body.mobileNumber
         });
         return res.status(201).json({
             success: true,
@@ -36,11 +38,11 @@ const signIn = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
-            message: "Something went wrong in controller layer",
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: error.message,
             data: {},
             success: false,
-            err:error
+            err:error.explanation
         });
     }
 }

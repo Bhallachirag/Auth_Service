@@ -35,7 +35,20 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [3, 100]
       }
+    },
+
+    mobileNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        is: {
+          args: [/^\d{10}$/],  // only 10 digits
+          msg: 'Mobile number must be exactly 10 digits'
+        }
+      },
+      unique:true
     }
+
   }, {
     sequelize,
     modelName: 'User',
