@@ -91,55 +91,61 @@ const isAdmin = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
-        const user = await User.findByPk(req.params.id);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-
-        return res.status(200).json({ success: true, data: user });
+        const response = await userService.getUserById(req.params.id);
+        return res.status(200).json({ 
+            success: true, 
+            data: response 
+        });
     } catch (error) {
-        return res.status(500).json({ success: false, message: 'Internal Server Error' });
+        console.log(error);
+        return res.status(error.statusCode || 500).json({ 
+            success: false, 
+            message: error.error || error.message || 'Internal Server Error' 
+        });
     }
-};
+}
 
 const getUserInfo = async (req, res) => {
     try {
         const token = req.headers['x-access-token'];
         if (!token) {
-            return res.status(401).json({ success: false, message: 'Token missing' });
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Token missing' 
+            });
         }
 
-        const response = await UserController.isAuthenticated(token);
-        if (!response.success) {
-            return res.status(401).json({ success: false, message: 'Invalid token' });
-        }
-
-        const userId = response.data.id;
-        const user = await User.findByPk(userId, {
-            attributes: ['id', 'email']
+        const response = await userService.getUserInfo(token);
+        return res.status(200).json({ 
+            success: true, 
+            data: response 
         });
-
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        return res.status(200).json({ success: true, data: user });
     } catch (error) {
         console.log(error);
-        return res.status(500).json({ success: false, message: 'Internal Server Error' });
+        return res.status(error.statusCode || 500).json({ 
+            success: false, 
+            message: error.error || error.message || 'Internal Server Error' 
+        });
     }
-};
+}
 
 const getUserByEmail = async (req, res) => {
     try {
-        const user = await User.findOne({ where: { email: req.params.email } });
-        if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
-        }
-        res.json({ success: true, data: user });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+        const response = await userService.getUserByEmail(req.params.email);
+        return res.status(200).json({ 
+            success: true, 
+            data: response 
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(error.statusCode || 500).json({ 
+            success: false, 
+            message: error.error || error.message || 'Internal Server Error' 
+        });
     }
-};
+}
+
+
 
 module.exports = {
     create,

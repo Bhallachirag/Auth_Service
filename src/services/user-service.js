@@ -96,6 +96,51 @@ class UserService {
             throw error;
          }
     }
+
+    async getUserById(userId) {
+        try {
+            const user = await this.userRepository.getByIdWithDetails(userId);
+            return user;
+        } catch (error) {
+            console.log("Something went wrong in service layer");
+            throw error;
+        }
+    }
+
+    async getUserInfo(token) {
+        try {
+            const authResponse = await this.isAuthenticated(token);
+            if (!authResponse.success) {
+                throw {
+                    error: "Invalid token",
+                    statusCode: 401
+                };
+            }
+
+            const userId = authResponse.data.id;
+            const user = await this.userRepository.getUserInfo(userId);
+            return user;
+        } catch (error) {
+            console.log("Something went wrong in service layer");
+            throw error;
+        }
+    }
+
+    async getUserByEmail(email) {
+        try {
+            const user = await this.userRepository.findByEmail(email);
+            if (!user) {
+                throw {
+                    error: "User not found",
+                    statusCode: 404
+                };
+            }
+            return user;
+        } catch (error) {
+            console.log("Something went wrong in service layer");
+            throw error;
+        }
+    }
 }
 
 module.exports = UserService;

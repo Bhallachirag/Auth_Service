@@ -22,9 +22,9 @@ router.get(
     UserController.isAuthenticated
 );
 
-router.get('/dummy', (req,res) => {
-    return res.status(200).json({message: "OK"})
-});
+// router.get('/dummy', (req,res) => {
+//     return res.status(200).json({message: "OK"})
+// });
 
 router.get(
     '/isAdmin',
@@ -32,20 +32,9 @@ router.get(
     UserController.isAdmin
 );
 
-router.get(
-    '/users/:id',
-    UserController.getUserById
-);
-
-router.get(
-    '/userinfo',
-    UserController.getUserInfo
-);
-
-router.get(
-    '/users/email/:email',
-    UserController.getUserByEmail
-);
+router.get('/users/:id', UserController.getUserById);
+router.get('/userinfo', UserController.getUserInfo);
+router.get('/users/email/:email', UserController.getUserByEmail);
 
 
 module.exports = router; 

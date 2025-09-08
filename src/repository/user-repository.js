@@ -81,6 +81,54 @@ class UserRepository {
         }
     }
 
+    async getByIdWithDetails(userId) {
+        try {
+            const user = await User.findByPk(userId);
+            if (!user) {
+                throw {
+                    error: "User not found",
+                    statusCode: 404
+                };
+            }
+            return user;
+        } catch (error) {
+            console.log("Something went wrong on repository layer");
+            throw error;
+        }
+    }
+
+    async getUserInfo(userId) {
+        try {
+            const user = await User.findByPk(userId, {
+                attributes: ['id', 'email']
+            });
+            if (!user) {
+                throw {
+                    error: "User not found",
+                    statusCode: 404
+                };
+            }
+            return user;
+        } catch (error) {
+            console.log("Something went wrong on repository layer");
+            throw error;
+        }
+    }
+
+    async findByEmail(userEmail) {
+        try {
+            const user = await User.findOne({
+                where: {
+                    email: userEmail
+                }
+            });
+            return user;
+        } catch (error) {
+            console.log("Something went wrong on repository layer");
+            throw error;
+        }
+    }
+
 }
 
 module.exports = UserRepository;
