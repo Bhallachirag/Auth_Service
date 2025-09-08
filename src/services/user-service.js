@@ -24,15 +24,12 @@ class UserService {
 
     async signIn(email, plainPassword){
         try {
-            //step 1:get user by email
             const user = await this.userRepository.getByEmail(email);
-            //step 2:compare encrypted password with plain password
             const passwordsMatch = this.checkPassword(plainPassword, user.password);
             if(!passwordsMatch) {
                 console.log("Password does not match");
                 throw {error: "Incorrect Password"};
             }
-            //step 3: if passwords match, create a new JWT token and sent it to the user
             const newJWT = this.createToken({email: user.email, id: user.id});
             return newJWT;
 

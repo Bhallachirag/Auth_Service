@@ -1,12 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
-const { PORT } = require('./config/serverConfig');
+const { PORT, FRONT_END_LINK} = require('./config/serverConfig');
 const apiRoutes = require('./routes/index');
 
 const db = require('./models/index'); 
 
 const app = express();
+
+app.use(cors({
+  origin: FRONT_END_LINK,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 const prepareAndStartServer = () => {
 

@@ -2,6 +2,7 @@ const express = require('express');
 
 const UserController = require('../../controllers/user-controller');
 const {AuthRequestValidators}  = require('../../middlewares/index');
+const { User } = require('../../models/index'); 
 
 const router = express.Router();
 
@@ -30,5 +31,21 @@ router.get(
     AuthRequestValidators.validateIsAdminRequest,
     UserController.isAdmin
 );
+
+router.get(
+    '/users/:id',
+    UserController.getUserById
+);
+
+router.get(
+    '/userinfo',
+    UserController.getUserInfo
+);
+
+router.get(
+    '/users/email/:email',
+    UserController.getUserByEmail
+);
+
 
 module.exports = router; 
